@@ -1,29 +1,59 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    //路由重定向
+    {
+        path: '/',
+        redirect: '/movie'
+    },
+    {
+        path: '/movie',
+        name: 'Movie',
+        component: () => import('../views/Movie/Movie'),
+        //二级路由
+        children: [
+            {
+                path:'/movie',
+                redirect:'nowPlaying'
+            },
+            {
+                path: 'city',
+                component: () => import('../components/City/City')
+            },
+            {
+                path: 'nowPlaying',
+                component: () => import('../components/Nowplaying/NowPlaying')
+            },
+            {
+                path: 'comingSoon',
+                component: () => import('../components/CommingSoon/CommingSoon')
+            }
+            , {
+                path: 'search',
+                component: () => import('../components/Search/Search')
+            }]
+    },
+    {
+        path: '/mine',
+        name: 'Mine',
+        component: () => import('../views/Mine/Mine')
+    },
+    {
+        path: '/cinema',
+        name: 'Cinema',
+        component: () => import('../views/Cinema/Cinema')
+    },
+
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
 
 export default router
