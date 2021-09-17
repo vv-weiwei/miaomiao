@@ -1,37 +1,11 @@
 <template>
 
     <div class="city_body">
-        <!-- <div class="city_list">
-                <div class="city_hot">
-                    <h2>热门城市</h2>
-                    <ul class="clearfix">
-                        <li>上海</li>
-                    </ul>
-                </div>
-                <div class="city_sort">
-                    <div>
-                        <h2>A</h2>
-                        <ul>
-                            <li>阿拉善盟</li>
-                            <li>鞍山</li>
-                            <li>安庆</li>
-                            <li>安阳</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="city_index">
-                <ul>
-                    <li>A</li>
-                    <li>B</li>
-                    <li>C</li>
-                    <li>D</li>
-                    <li>E</li>
-                </ul>
-            </div> -->
+
         <div class="city_list">
 
             <div>
+<!--                热门城市-->
                 <div class="city_hot">
                     <h2>热门城市</h2>
                     <ul class="clearfix">
@@ -44,6 +18,7 @@
                         </li>
                     </ul>
                 </div>
+<!--                所有城市-->
                 <div class="city_sort" ref="city_sort">
                     <div v-for="item in cityList" :key="item.index">
                         <h2>{{ item.index }}</h2>
@@ -61,6 +36,7 @@
             </div>
 
         </div>
+<!--        城市首字母-->
         <div class="city_index">
             <ul>
                 <li
@@ -98,11 +74,12 @@ export default {
 
     },
     methods: {
+        //城市按拼音首字母分类
         formatCityList(cities) {
             let cityList = [];
             let hostList = [];
-            //取出前16个认作是热门城市
-            for (let i = 0; i < 20; i++) {
+            //取出前20个认作是热门城市
+            for (let i = 0; i < 8; i++) {
                 hostList.push(cities[i])
             }
 
@@ -127,7 +104,7 @@ export default {
                     return 1
                 }
             })
-
+            //判断首字母城市是否存在
             function toCom(firstLetter) {
                 for (let i = 0; i < cityList.length; i++) {
                     if (cityList[i].index === firstLetter) {
@@ -143,9 +120,11 @@ export default {
                 hostList
             }
         },
+
         handleToCity() {
 
         },
+        //点击地区字母返回相应的位置
         handleToIndex(index) {
 
             let h2 = this.$refs.city_sort.getElementsByTagName('h2')

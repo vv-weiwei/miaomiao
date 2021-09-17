@@ -6,7 +6,9 @@ import store from './store'
 import axios from "axios";
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
-
+Vue.filter('setWH',(url)=>{
+  return url.replace(/w\.h/,'170.230')
+})
 new Vue({
   router,
   store,

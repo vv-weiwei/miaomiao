@@ -1,25 +1,41 @@
 <template>
     <div class="movie_body">
-    <ul>
-        <li>
-            <div class="pic_show"><img src="https://z3.ax1x.com/2021/08/19/f7LZwV.jpg"></div>
-            <div class="info_list">
-                <h2>无名之辈</h2>
-                <p><span class="person">17746</span> 人想看</p>
-                <p>主演: 陈建斌,任素汐,潘斌龙</p>
-                <p>2018-11-30上映</p>
-            </div>
-            <div class="btn_pre">
-                预售
-            </div>
-        </li>
-    </ul>
+        <ul>
+            <li v-for="item in comingList" :key="item.id">
+                <div class="pic_show"><img :src="item.img | setWH"></div>
+                <div class="info_list">
+                    <h2>{{item.nm}}</h2>
+                    <p><span class="person">{{item.wish}}</span> 人想看</p>
+                    <p>主演: {{item.star}}</p>
+                    <p>{{item.showInfo}}</p>
+                </div>
+                <div class="btn_pre">
+                    预售
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
 <script>
 export default {
-    name: "CommingSoon"
+    name: "CommingSoon",
+    data() {
+        return {
+            comingList: []
+        }
+    },
+    async mounted() {
+        const res = await this.$http({
+            method: 'get', url: '/api/ajax/comingList', params: {
+                ci: 1,
+                limit: 19, token: 'token'
+            }
+        })
+        this.comingList = res.data.coming
+
+
+    },
 }
 </script>
 

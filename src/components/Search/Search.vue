@@ -9,13 +9,29 @@
         <div class="search_result">
             <h3>电影/电视剧/综艺</h3>
             <ul>
-                <li>
-                    <div class="img"><img src="https://z3.ax1x.com/2021/08/19/f7LZwV.jpg"></div>
+                <li v-for="item in movieList">
+                    <div class="img"><img :src="item.img | setWH"></div>
                     <div class="info">
-                        <p><span>无名之辈</span><span>8.5</span></p>
-                        <p>A Cool Fish</p>
-                        <p>剧情,喜剧,犯罪</p>
-                        <p>2018-11-16</p>
+                        <p><span>{{item.nm}}</span><span>8.5</span></p>
+                        <p>{{item.enm}}</p>
+                        <p>{{item.cat}}</p>
+                        <p>{{item.pubDesc}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="search_result">
+            <h3>影院</h3>
+            <ul>
+                <li v-for="item in cinemasList">
+
+                    <div class="info">
+                        <p><span>{{item.nm}}</span><span :style="{color:'red'}">{{item.sellPrice}}<span>元起</span></span>
+                        </p>
+                        <p>{{item.addr}}</p>
+
+
                     </div>
                 </li>
             </ul>
@@ -25,7 +41,55 @@
 
 <script>
 export default {
-    name: "Search"
+    name: "Search",
+    data() {
+        return {
+            message: '',
+            movieList: [],
+            cinemasList: []
+        }
+    },
+    mounted() {
+
+
+    },
+    methods: {
+        //防抖
+        cancelRequest() {
+            if (typeof this.source === 'function') {
+                this.source("请求终止")
+            }
+        }
+    },
+    watch: {
+        message(newVal) {
+            //防抖
+            let timer
+            let that = this
+            if (timer) {
+                clearTimeout(timer)
+            }
+
+            timer = setTimeout(async () => {
+                const res = await that.$http({
+                    method: 'get', url: '/api2/apollo/ajax/search',
+                    params: {
+                        cityId: 10,
+                        kw: newVal
+                    },
+
+                })
+
+                that.movieList = res.data.movies.list
+                that.cinemasList = res.data.cinemas.list
+
+            }, 1000)
+
+            console.log(newVal)
+
+
+        }
+    }
 }
 </script>
 

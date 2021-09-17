@@ -1,52 +1,59 @@
 <template>
     <div class="movie_body">
         <ul>
-            <li>
-                <div class="pic_show"><img src="https://z3.ax1x.com/2021/08/19/f7LZwV.jpg" alt=""></div>
+            <li v-for="item in imgSrc" :key="item.id">
+                <div class="pic_show"><img :src="item.img" alt=""></div>
                 <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评分<span class="grade">9.3</span></p>
-                    <p>主演：许薇薇、汤洁、孙婷</p>
-                    <p>今天66家电影放映777场</p>
+                    <h2>{{item.nm}}<img v-if="item.version==='v3d imax'" src="../../assets/maxs.png" alt=""></h2>
+                    <p>观众评分<span class="grade">{{item.sc}}</span></p>
+                    <p>主演：{{item.star}}</p>
+                    <p>{{item.showInfo}}</p>
 
                 </div>
                 <div class="btn_mall">
                     购票
                 </div>
             </li>
-            <li>
-                <div class="pic_show"><img src="https://z3.ax1x.com/2021/08/19/f7LZwV.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评分<span class="grade">9.3</span></p>
-                    <p>主演：许薇薇、汤洁、孙婷</p>
-                    <p>今天66家电影放映777场</p>
 
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="https://z3.ax1x.com/2021/08/19/f7LZwV.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评分<span class="grade">9.3</span></p>
-                    <p>主演：许薇薇、汤洁、孙婷</p>
-                    <p>今天66家电影放映777场</p>
-
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
         </ul>
+
     </div>
 </template>
 
 <script>
 export default {
-    name: "NowPlaying"
+    name: "NowPlaying",
+    data() {
+        return {
+            movieList: []
+        }
+    },
+    async mounted() {
+        const res = await this.$http.get('/api/ajax/movieOnInfoList')
+        console.log(res.data.movieList)
+        this.movieList = res.data.movieList
+
+
+    },
+    computed: {
+        imgSrc() {
+            let modifyMovieList = []
+            this.movieList.map((item) => {
+                modifyMovieList.push({
+                    img: item.img.replace('w.h', '170.230'),
+                    id: item.id,
+                    nm: item.nm,
+                    star: item.star,
+                    showInfo: item.showInfo,
+                    sc: item.sc,
+                    version: item.version
+
+                })
+            })
+            return modifyMovieList
+
+        }
+    }
 }
 </script>
 
